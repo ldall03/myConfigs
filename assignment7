@@ -1,0 +1,97 @@
+ASSERT((j == k && 2 >= x) || (j != k && (i != k && A[k] >= x)))
+ASSERT((j == k && 2 >= x) || (j != k && (i == k && x >= x || i != k && A[k] >= x)))
+ASSERT((j == k && 2 >= x) || (j != k && (A|i -> x) [k] >= x))
+A[i] = x
+ASSERT((j == k && 2 >= x) || (j != k && A[k] >= x))
+ASSERT((A|j -> 2)[k] >= x)
+A[j] = 2
+ASSERT(A[k] >= x)
+
+// Do the expension at the end
+
+ASSERT(i != k && (j == k && 2 >= x || j != k && A[k] >= x))
+ASSERT(i == k && x >= x || i != k && (j == k && 2 >=x || j != k && A[k] >= x))
+ASSERT(i == k && x >= x || i != k && (A|j -> 2) [k] >= x)
+ASSERT(((A|j -> 2)|i -> x) [k] >= x)
+A[i] = x
+ASSERT((A|j -> 2) [k] >= x)
+A[j] = 2
+ASSERT(A[k] >= x)
+
+
+ASSERT(1 <= n < max)
+int j;
+ASSERT(true)
+ASSERT(1 == 1)
+ASSERT(1 == power(2, 0+1) - 1))
+ASSERT((A|0 -> 1)[0] == power(2, 0+1) - 1))
+ASSERT(ForAll(k = 0; k < 1) (A|0 -> 1)[k] == power(2, k+1) - 1))
+j = 1;
+ASSERT(ForAll(k = 0; k < j) (A|0 -> 1)[k] == power(2, k+1) - 1))
+A[0] = 1;
+ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1))
+while (j < n) {
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1) && j < n) // k < j because j > -1 && k == 0 && k != j therefore j > k
+    ASSERT(ForAll(k = 0; -1 < j) j != k && A[k] == power(2, k+1) - 1) && j < n)
+    ASSERT(ForAll(k = 0; 0 < j+1) j != k && A[k] == power(2, k+1) - 1) && j < n)
+    ASSERT(ForAll(k = 0; k < j+1) j != k && A[k] == power(2, k+1) - 1) && j < n)
+    ASSERT((ForAll(k = 0; true) (j == k && A[k-1] == 2^k - 1) || (ForAll(k = 0; k < j+1) j != k && A[k] == 2*2^k - 1)) && j < n)
+    ASSERT((ForAll(k = 0; k < k+1) (j == k && A[k-1] == 2^k - 1) || (ForAll(k = 0; k < j+1) j != k && A[k] == 2*2^k - 1)) && j < n)
+    ASSERT((ForAll(k = 0; k < j+1) (j == k && A[k-1] == 2^k - 1) || (ForAll(k = 0; k < j+1) j != k && A[k] == 2*2^k - 1)) && j < n)
+    ASSERT(ForAll(k = 0; k < j+1) ((j == k && A[k-1] == 2^k - 1) || (j != k && A[k] == 2*2^k - 1))) && j < n
+    ASSERT(ForAll(k = 0; k < j+1) ((j == k && A[k-1]+2^k == 2^k+2^k - 1) || (j != k && A[k] == 2*2^k - 1))) && j < n
+    ASSERT(ForAll(k = 0; k < j+1) ((j == k && A[k-1]+2^k == 2*2^k - 1) || (j != k && A[k] == 2*2^k - 1))) && j < n
+    ASSERT(ForAll(k = 0; k < j+1) ((j == k && A[j-1]+power(2,j) == power(2, k+1) - 1) || (j != k && A[k] == power(2, k+1) - 1)) && j < n)
+    ASSERT(ForAll(k = 0; k < j+1) (A|j -> A[j-1]+power(2,j))[k] == power(2, k+1) - 1 && j < n)
+    A[j] = A[j-1] + power(2, j);
+    ASSERT(ForAll(k = 0; k < j+1) A[k] == power(2, k+1) - 1 && j < n)
+    j = j + 1;
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j < n)
+}
+ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j >= n)
+ASSERT(ForAll(k = 0; k < n) A[k] == power(2, k+1) - 1 && j >= n) // Because the loop finished
+ASSERT(ForAll(k = 0; k < n) A[k] == power(2, k+1) - 1)
+
+
+
+
+
+
+
+
+
+ASSERT(1 <= n < max) // Strengthening
+int j;
+ASSERT(true)
+ASSERT(1 == 1) // 2^1 = 1
+ASSERT(1 == power(2, 1) - 1) // Removed the ForAll because 0 < 1 is true as k=0 and we don't have a j anymore
+ASSERT(ForAll(k = 0; 0 < 1) 1 == power(2, 0+1) - 1) // Since k == 0 then we look at A[0] which is = 1
+ASSERT(ForAll(k = 0; k < 1) (A|0 -> 1)[k] == power(2, k+1) - 1)
+j = 1;
+ASSERT(ForAll(k = 0; k < j) (A|0 -> 1)[k] == power(2, k+1) - 1)
+A[0] = 1;
+ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1)
+while (j < n) {
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j < n) // This is the invariant
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j < n) // If j+1 < n then j < j+1 < n then j < n
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j < j+1 < n)
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j+1 < n) // j < k implies j != k so we can remove it
+    ASSERT(ForAll(k = 0; k < j) j != k && A[k] == power(2, k+1)-1 && j+1 < n) // Since j > -1 && j != k so j != 0 therefor j > k
+    ASSERT(ForAll(k = 0; -1 < j) j != k && A[k] == power(2, k+1)-1 && j+1 < n)
+    ASSERT(ForAll(k = 0; 0 < j+1) j != k && A[k] == power(2, k+1)-1 && j+1 < n)
+    ASSERT(ForAll(k = 0; k < j+1) j != k && A[k] == power(2, k+1)-1 && j+1 < n) // If k == 0, we have A[-1] which does not work, remove that branch
+    ASSERT(ForAll(k = 0; k < j+1) (j == k && A[k-1] + power(2, k) == power(2, k+1)-1 || j != k && A[k] == power(2, k+1)-1) && j+1 < n)
+    
+    ASSERT(ForAll(k = 0; k < j+1) (A[j-1] + power(2, j) == power(2, j+1) - 1 || j != k && A[k] == power(2, k+1)-1) && j+1 < n)
+    ASSERT(ForAll(k = 0; k < j+1) (j == k && A[j-1] + power(2, j) == power(2, k+1) - 1 || j != k && A[k] == power(2, k+1)-1) && j+1 < n)
+    
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j+1 < n) && A[j-1] + power(2,j) == power(2,j+1)
+    ASSERT(ForAll(k = 0; k < j+1) (A|j -> A[j-1] + power(2, j)) [k] == power(2, k+1) - 1)
+    A[j] = A[j-1] + power(2, j);
+    ASSERT(ForAll(k = 0; k < j+1) A[k] == power(2, k+1) - 1)
+    j = j + 1;
+    ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j < n)
+}
+ASSERT(ForAll(k = 0; k < j) A[k] == power(2, k+1) - 1 && j >= n) // Since j >= n then k < n <= j
+ASSERT(ForAll(k = 0; k < n) A[k] == power(2, k+1) - 1 && j >= n) // Because looped finished
+ASSERT(ForAll(k = 0; k < n) A[k] == power(2, k+1) - 1)
